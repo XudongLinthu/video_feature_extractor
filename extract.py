@@ -90,6 +90,8 @@ args = parser.parse_args()
 
 if os.path.isfile(args.csv):
     extract(args, args.csv)
+if args.type == 'ig':
+    args.batch_size = 32
 
 if os.path.isdir(args.csv):
     print("Some better message")
@@ -99,7 +101,7 @@ if os.path.isdir(args.csv):
     executor = submitit.AutoExecutor(folder=log_dir)
     executor.update_parameters(
         name="extract_h21m",
-        mem_gb=80 if args.type != "ig" else 120,
+        mem_gb=80 if args.type != "ig" else 230,
         gpus_per_node=1,
         cpus_per_task=10,
         timeout_min=60*12,
