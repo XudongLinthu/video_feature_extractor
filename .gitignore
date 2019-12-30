@@ -1,6 +1,9 @@
 *.vscode
 *.pyc
 
+*.log
+*.pkl
+
 *.csv
 *.npy
 model/*

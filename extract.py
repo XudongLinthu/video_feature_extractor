@@ -99,7 +99,7 @@ if os.path.isdir(args.csv):
     executor = submitit.AutoExecutor(folder=log_dir)
     executor.update_parameters(
         name="extract_h21m",
-        mem_gb=60,
+        mem_gb=80 if args.type != "ig" else 120,
         gpus_per_node=1,
         cpus_per_task=10,
         timeout_min=60*12,
