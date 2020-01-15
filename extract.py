@@ -91,7 +91,7 @@ args = parser.parse_args()
 if os.path.isfile(args.csv):
     extract(args, args.csv)
 if args.type == 'ig':
-    args.batch_size = 32
+    args.batch_size = 24
 
 if os.path.isdir(args.csv):
     print("Some better message")
