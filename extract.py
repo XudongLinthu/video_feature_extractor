@@ -100,7 +100,7 @@ if os.path.isdir(args.csv):
     os.makedirs(log_dir, exist_ok=True)
     executor = submitit.AutoExecutor(folder=log_dir)
     executor.update_parameters(
-        name="extract_h21m",
+        name="ig_fe_antoine",
         mem_gb=80 if args.type != "ig" else 230,
         gpus_per_node=1,
         cpus_per_task=10,
