@@ -96,7 +96,7 @@ if args.type == 'ig':
 if os.path.isdir(args.csv):
     print("Some better message")
     import submitit
-    log_dir = "./logs_{}".format(args.type)
+    log_dir = "/checkpoint/bkorbar/logs_{}".format(args.type)
     os.makedirs(log_dir, exist_ok=True)
     executor = submitit.AutoExecutor(folder=log_dir)
     executor.update_parameters(
