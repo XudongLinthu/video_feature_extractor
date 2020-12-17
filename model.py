@@ -16,14 +16,23 @@ class GlobalAvgPool(nn.Module):
         return th.mean(x, dim=[-2, -1])
 
 
-class AdaptivePool(nn.Module):
+class AdaptivePool_bruno(nn.Module):
     def __init__(self, d=2):
         super(AdaptivePool, self).__init__()
         self.pool = nn.AdaptiveAvgPool3d((1, d, d))
 
     def forward(self, x):
         return self.pool(x).view(-1, 2048)
+    
+class AdaptivePool(nn.Module):
+    def __init__(self, d=1):
+        super(AdaptivePool, self).__init__()
+        self.pool = nn.AdaptiveAvgPool3d((1, d, d))
 
+    def forward(self, x):
+        #print(x.shape)
+        #print(self.pool(x).view(-1, 512).shape)
+        return self.pool(x).view(-1, 512)
 
 def get_model(args):
     assert args.type in ["2d", "3d", "ig"]

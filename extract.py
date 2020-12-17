@@ -31,7 +31,7 @@ def extract(args, csv):
     )
     preprocess = Preprocessing(args.type)
     model = get_model(args)
-
+    dim = 512 #2048
     with th.no_grad():
         for k, data in enumerate(loader):
             input_file = data['input'][0]
@@ -43,15 +43,17 @@ def extract(args, csv):
                 if len(video.shape) == 4:
                     video = preprocess(video)
                     n_chunk = len(video)
-                    features = th.cuda.FloatTensor(n_chunk, 2048).fill_(0)
+                    #features = th.cuda.FloatTensor(n_chunk, dim).fill_(0)
                     n_iter = int(math.ceil(n_chunk / float(args.batch_size)))
+                    features = th.cuda.FloatTensor(n_iter, dim).fill_(0)
                     for i in range(n_iter):
-                        min_ind = i * args.batch_size
-                        max_ind = (i + 1) * args.batch_size
-                        video_batch = video[min_ind:max_ind].cuda()
+                        min_ind = i #* args.batch_size
+                        max_ind = (i + 1) #* args.batch_size
+                        video_batch = video[min_ind* args.batch_size:max_ind* args.batch_size].cuda()
                         if args.type == "ig":
                             video_batch = video_batch.permute(1, 0, 2, 3).unsqueeze(0)
                             batch_features = model(video_batch)
+                            #print(video_batch.shape, batch_features.shape, features.shape, video.shape)
                         else:
                             batch_features = model(video_batch)
                         if args.l2_normalize:
@@ -91,12 +93,12 @@ args = parser.parse_args()
 if os.path.isfile(args.csv):
     extract(args, args.csv)
 if args.type == 'ig':
-    args.batch_size = 24
+    args.batch_size = 32
 
 if os.path.isdir(args.csv):
     print("Some better message")
     import submitit
-    log_dir = "/checkpoint/bkorbar/logs_{}".format(args.type)
+    log_dir = "/checkpoint/xudonglin/logs_{}".format(args.type)
     os.makedirs(log_dir, exist_ok=True)
     executor = submitit.AutoExecutor(folder=log_dir)
     executor.update_parameters(
